@@ -347,13 +347,6 @@ public class JPNodeVisitor extends ProparseBaseVisitor<Builder> {
   }
 
   @Override
-  public Builder visitExprt2ParenCall2(Exprt2ParenCall2Context ctx) {
-    Builder holder = createTreeFromFirstNode(ctx);
-    holder.changeType(ABLNodeType.LOCAL_METHOD_REF);
-    return holder;
-  }
-
-  @Override
   public Builder visitExprt2Field(Exprt2FieldContext ctx) {
     if (ctx.ENTERED() != null)
       return createTree(ctx, ABLNodeType.ENTERED_FUNC);

@@ -532,12 +532,6 @@ expressionTerm2:
   | NEW typeName parameterList # exprt2New
   | // Have to predicate all of builtinfunc, because it can be ambiguous with method call.
     builtinFunction  # exprt2BuiltinFunc
-  | // We are going to have lots of cases where we are inheriting methods
-    // from a superclass which we don't have the source for. At this
-    // point in expression evaluation, if we have anything followed by a left-paren,
-    // we're going to assume it's a method call.
-    // Method names which are reserved keywords must be prefixed with THIS-OBJECT:.
-    { support.isClass() && support.unknownMethodCallsAllowed() }? methodname=identifier parameterListNoRoot # exprt2ParenCall2
   | constant   # exprt2Constant
   | noArgFunction  # exprt2NoArgFunc
   | systemHandleName  # exprt2SystemHandleName
