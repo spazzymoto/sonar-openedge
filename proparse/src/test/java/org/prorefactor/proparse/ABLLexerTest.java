@@ -97,7 +97,7 @@ public class ABLLexerTest {
     // SESSION:FIRST-SERVER-SOCKET:HANDLE.
     assertEquals(lexer.nextToken().getType(), Proparse.SESSION);
     assertEquals(lexer.nextToken().getType(), Proparse.OBJCOLON);
-    assertEquals(lexer.nextToken().getType(), Proparse.ID);
+    assertEquals(lexer.nextToken().getType(), Proparse.FIRSTSERVERSOCKET);
     assertEquals(lexer.nextToken().getType(), Proparse.OBJCOLON);
     assertEquals(lexer.nextToken().getType(), Proparse.HANDLE);
     assertEquals(lexer.nextToken().getType(), Proparse.PERIOD);
@@ -128,7 +128,7 @@ public class ABLLexerTest {
     assertEquals(lexer.nextToken().getType(), Proparse.DOUBLECOLON);
     assertEquals(lexer.nextToken().getType(), Proparse.ID);
     assertEquals(lexer.nextToken().getType(), Proparse.OBJCOLON);
-    assertEquals(lexer.nextToken().getType(), Proparse.ID);
+    assertEquals(lexer.nextToken().getType(), Proparse.SETCALLBACK);
     assertEquals(lexer.nextToken().getType(), Proparse.LEFTPAREN);
     assertEquals(lexer.nextToken().getType(), Proparse.RIGHTPAREN);
     assertEquals(lexer.nextToken().getType(), Proparse.PERIOD);
@@ -350,7 +350,7 @@ public class ABLLexerTest {
 
     ABLLexer lexer3 = new ABLLexer(session, ByteSource.wrap("USERID USER-ID ".getBytes()), "file.txt");
     assertNextTokenTypeWS(lexer3, ABLNodeType.USERID, "USERID");
-    assertNextTokenTypeWS(lexer3, ABLNodeType.ID, "USER-ID");
+    assertNextTokenTypeWS(lexer3, ABLNodeType.USERID2, "USER-ID");
   }
 
   @Test

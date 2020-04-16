@@ -239,7 +239,7 @@ public class TokenListTest {
       assertEquals(src.nextToken().getType(), Proparse.ID);
       assertEquals(src.nextToken().getType(), Proparse.PERIOD);
       assertEquals(src.nextToken().getType(), Proparse.WS);
-      assertEquals(src.nextToken().getType(), Proparse.ID);
+      assertEquals(src.nextToken().getType(), Proparse.NAME);
       assertEquals(src.nextToken().getType(), Proparse.PERIOD);
       assertEquals(src.nextToken().getType(), Proparse.WS);
       // Third line: comment after period results in NAMEDOT
