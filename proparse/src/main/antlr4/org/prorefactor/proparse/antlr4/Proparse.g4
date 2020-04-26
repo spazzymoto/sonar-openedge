@@ -503,6 +503,7 @@ expression:
   | expression ( EQUAL | EQ | GTORLT | NE | RIGHTANGLE | GTHAN | GTOREQUAL | GE | LEFTANGLE | LTHAN | LTOREQUAL | LE ) expression # expressionComparison
   | expression ( MATCHES | BEGINS | CONTAINS ) expression # expressionStringComparison
   | NOT expression  # expressionNot
+  | IF expression THEN expression ELSE expression # expressionIf
   | expression AND expression # expressionAnd
   | expression OR expression # expressionOr
   | expressionTerm # expressionExprt
@@ -515,11 +516,26 @@ expression:
 // Expression term: constant, function, fields, attributes, methods.
 
 expressionTerm:
-    NORETURNVALUE sWidget colonAttribute  # exprtNoReturnValue
-  | // Widget attributes has to be checked before field or func, because they can be ambiguous up to the OBJCOLON. Think about no-arg functions like SUPER.
-    // Also has to be checked before systemhandlename, because you want to pick up all of FILE-INFO:FILE-TYPE rather than just FILE-INFO, for example.
-    widName colonAttribute     # exprtWidName
-  | expressionTerm2 colonAttribute?     # exprtExprt2
+    expressionTerm ( OBJCOLON | DOUBLECOLON ) ( methodCallTerm | nonPunctuating )
+  | expressionTerm arraySubscript
+  | NEW typeName parameterList
+  | expressionTerm inuic
+  | /*{ support.isMethodOrFunc(_input.LT(1)) == 0 }?*/ methodCallTerm
+  | primaryTerm
+  ;
+
+primaryTerm:
+    LEFTPAREN expression RIGHTPAREN
+  | builtinFunction
+  | constant
+  | systemHandleName
+  | noArgFunction
+  | widName
+  | field ( NOT? ENTERED )?
+  ;
+
+methodCallTerm:
+    nonPunctuating methodParamList
   ;
 
 expressionTerm2:
@@ -546,13 +562,17 @@ expressionTerm2:
   | field ( NOT? ENTERED )?  # exprt2Field
   ;
 
-widattr:
+/* widattr:
     widName colonAttribute  # widattrWidName
   | expressionTerm2 colonAttribute   # widattrExprt2
   ;
 
 colonAttribute:
     ( ( OBJCOLON | DOUBLECOLON ) id=. arraySubscript? methodParamList? )+ inuic? ( AS . )?
+  ;*/
+
+widattr:
+    expressionTerm (( OBJCOLON | DOUBLECOLON ) ( methodCallTerm | nonPunctuating ))?
   ;
 
 gWidget:

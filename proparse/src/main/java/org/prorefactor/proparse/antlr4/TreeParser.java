@@ -469,7 +469,7 @@ public class TreeParser extends ProparseBaseListener {
 
   // Expression term
 
-  @Override
+  /* @Override
   public void enterExprtNoReturnValue(ExprtNoReturnValueContext ctx) {
     ContextQualifier qual = contextQualifiers.removeFrom(ctx);
     setContextQualifier(ctx.sWidget(), qual);
@@ -492,7 +492,7 @@ public class TreeParser extends ProparseBaseListener {
       if (ctx.colonAttribute() != null)
         setContextQualifier(ctx.colonAttribute(), qual);
     }
-  }
+  }*/
 
   @Override
   public void enterExprt2ParenExpr(Exprt2ParenExprContext ctx) {
@@ -507,7 +507,7 @@ public class TreeParser extends ProparseBaseListener {
     setContextQualifier(ctx.field(), qual);
   }
 
-  @Override
+  /*@Override
   public void enterWidattrExprt2(WidattrExprt2Context ctx) {
     if ((ctx.expressionTerm2() instanceof Exprt2FieldContext) && (ctx.colonAttribute().OBJCOLON(0) != null)) {
       widattr((Exprt2FieldContext) ctx.expressionTerm2(), contextQualifiers.removeFrom(ctx),
@@ -518,7 +518,7 @@ public class TreeParser extends ProparseBaseListener {
   @Override
   public void enterWidattrWidName(WidattrWidNameContext ctx) {
     widattr(ctx, contextQualifiers.removeFrom(ctx));
-  }
+  }*/
 
   @Override
   public void enterGWidget(GWidgetContext ctx) {
@@ -2663,7 +2663,7 @@ public class TreeParser extends ProparseBaseListener {
 
   // Called from expressionTerm2 rule, exprtWidName option
   // Check if THIS-OBJECT:SomeAttribute 
-  private void widattr(ExprtWidNameContext ctx, ContextQualifier cq) {
+ /*  private void widattr(ExprtWidNameContext ctx, ContextQualifier cq) {
     if ((ctx.widName().systemHandleName() != null) && (ctx.widName().systemHandleName().THISOBJECT() != null)
         && !ctx.colonAttribute().OBJCOLON().isEmpty() && (ctx.colonAttribute().OBJCOLON(0) != null)) {
       FieldLookupResult result = currentBlock.lookupField(ctx.colonAttribute().id.getText(), true);
@@ -2675,11 +2675,11 @@ public class TreeParser extends ProparseBaseListener {
         result.getSymbol().noteReference(cq);
       }
     }
-  }
+  }*/
 
   // Called from widattr rule, widattrWidName option
   // Check if THIS-OBJECT:SomeAttribute (same as previous rule)
-  private void widattr(WidattrWidNameContext ctx, ContextQualifier cq) {
+  /*private void widattr(WidattrWidNameContext ctx, ContextQualifier cq) {
     if ((ctx.widName().systemHandleName() != null) && (ctx.widName().systemHandleName().THISOBJECT() != null)
         && !ctx.colonAttribute().OBJCOLON().isEmpty() && (ctx.colonAttribute().OBJCOLON(0) != null)) {
       FieldLookupResult result = currentBlock.lookupField(ctx.colonAttribute().id.getText(), true);
@@ -2691,7 +2691,7 @@ public class TreeParser extends ProparseBaseListener {
         result.getSymbol().noteReference(cq);
       }
     }
-  }
+  }*/
 
   // Called from expressionTerm rule (expressionTerm2 option) and widattr rule (widattrExprt2 option)
   // Tries to add references to variables/properties of current class

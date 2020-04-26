@@ -279,7 +279,7 @@ public class JPNodeVisitor extends ProparseBaseVisitor<Builder> {
   // EXPRESSION BITS
   // ---------------
 
-  @Override
+  /* @Override
   public Builder visitExprtNoReturnValue(ExprtNoReturnValueContext ctx) {
     return createTree(ctx, ABLNodeType.WIDGET_REF);
   }
@@ -295,7 +295,7 @@ public class JPNodeVisitor extends ProparseBaseVisitor<Builder> {
       return createTree(ctx, ABLNodeType.WIDGET_REF);
     }
     return visitChildren(ctx);
-  }
+  } */
 
   @Override
   public Builder visitExprt2ParenExpr(Exprt2ParenExprContext ctx) {
@@ -329,7 +329,7 @@ public class JPNodeVisitor extends ProparseBaseVisitor<Builder> {
       return visitChildren(ctx);
   }
 
-  @Override
+  /*@Override
   public Builder visitWidattrWidName(WidattrWidNameContext ctx) {
     return createTree(ctx, ABLNodeType.WIDGET_REF);
   }
@@ -337,7 +337,7 @@ public class JPNodeVisitor extends ProparseBaseVisitor<Builder> {
   @Override
   public Builder visitWidattrExprt2(WidattrExprt2Context ctx) {
     return createTree(ctx, ABLNodeType.WIDGET_REF);
-  }
+  }*/
 
   @Override
   public Builder visitGWidget(GWidgetContext ctx) {

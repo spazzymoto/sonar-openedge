@@ -23,7 +23,6 @@ import static org.testng.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +35,6 @@ import org.prorefactor.core.schema.ISchema;
 import org.prorefactor.core.schema.Schema;
 import org.prorefactor.core.schema.Table;
 import org.prorefactor.core.util.UnitTestModule;
-import org.prorefactor.proparse.antlr4.Proparse;
 import org.prorefactor.refactor.RefactorSession;
 import org.prorefactor.treeparser.ParseUnit;
 import org.prorefactor.treeparser.symbols.TableBuffer;
@@ -412,6 +410,17 @@ public class ParserTest {
     unit.treeParser01();
     assertEquals(unit.getTopNode().queryStateHead().size(), 2);
     assertEquals(unit.getTopNode().query(ABLNodeType.GETDBCLIENT).size(), 2);
+  }
+
+  @Test
+  public void testExpression() {
+    ParseUnit unit = new ParseUnit(new ByteArrayInputStream(
+        "def var xx as int. xx = xx + (if (xx gt 1) then 1 else 2) + xx.".getBytes()),
+        "<unnamed>", session);
+    unit.enableTrace();
+    unit.treeParser01();
+     assertEquals(unit.getTopNode().queryStateHead().size(), 2);
+    // assertEquals(unit.getTopNode().query(ABLNodeType.GETDBCLIENT).size(), 2);
   }
 
   @Test
