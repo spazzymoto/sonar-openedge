@@ -837,6 +837,8 @@ public enum ABLNodeType {
   ETIME(Proparse.ETIME, "etime", NodeTypesOption.KEYWORD, NodeTypesOption.RESERVED),
   EVENT(Proparse.EVENT, "event", NodeTypesOption.KEYWORD),
   EVENTGROUPID(Proparse.EVENTGROUPID, "event-group-id", NodeTypesOption.KEYWORD),
+  EVENTHANDLER(Proparse.EVENTHANDLER, "event-handler", NodeTypesOption.KEYWORD),
+  EVENTHANDLERCONTEXT(Proparse.EVENTHANDLERCONTEXT, "event-handler-context", NodeTypesOption.KEYWORD),
   EVENTPROCEDURE(Proparse.EVENTPROCEDURE, "event-procedure", NodeTypesOption.KEYWORD, NodeTypesOption.RESERVED),
   EVENTPROCEDURECONTEXT(Proparse.EVENTPROCEDURECONTEXT, "event-procedure-context", NodeTypesOption.KEYWORD),
   EVENTS(Proparse.EVENTS, "events", NodeTypesOption.KEYWORD),
