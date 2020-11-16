@@ -45,6 +45,7 @@ public final class ProfilerUtils {
     ProfilerGrammarLexer lexer = new ProfilerGrammarLexer(CharStreams.fromStream(input));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     ProfilerGrammarParser parser = new ProfilerGrammarParser(tokens);
+    parser.setTrace(true);
     parser.setErrorHandler(new NoFailedPredicateErrorStrategy());
     ParseTree tree = parser.profiler();
 

@@ -1,0 +1,34 @@
+4 11/16/2020 "Generic" 08:36:39 "" {"StmtCnt":4,"DataPts":12,"NumWrites":0,"TotTime":0.002116,"BufferSize":61440,"Directory":"C:\Users\gquer\projets\test\package\","Propath":".,C:\Progress\OpenEdge-12.2\tty,C:\Progress\OpenEdge-12.2\tty\ablunit.pl,C:\Progress\OpenEdge-12.2\tty\adecomm.pl,C:\Progress\OpenEdge-12.2\tty\adecomp.pl,C:\Progress\OpenEdge-12.2\tty\adeedit.pl,C:\Progress\OpenEdge-12.2\tty\adeshar.pl,C:\Progress\OpenEdge-12.2\tty\dataadmin.pl,C:\Progress\OpenEdge-12.2\tty\OpenEdge.BusinessLogic.pl,C:\Progress\OpenEdge-12.2\tty\OpenEdge.Core.pl,C:\Progress\OpenEdge-12.2\tty\OpenEdge.ServerAdmin.pl,C:\Progress\OpenEdge-12.2\tty\prodict.pl,C:\Progress\OpenEdge-12.2,C:\Progress\OpenEdge-12.2\bin"}
+.
+1 "test.p" "" 27705 0 ""
+.
+0 0 1 1
+.
+0 0 1 0.000000 0.002116
+1 1 1 0.001212 0.001212
+1 0 1 0.000032 0.002116
+1 5 1 0.000000 0.000000
+1 4 1 0.000872 0.000872
+.
+.
+1 "" 4
+1
+3
+4
+5
+.
+.
+1 152 2 "ELIT" 
+1 10009 2 "MESSAGE       " 
+.
+1    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0  456.0   56.0  560.0   15.0    0.0    0.0  
+.
+0 2 0 0 
+1  1  
+.
+0 0 "-pf C:\Progress\OpenEdge-12.2\startup.pf,-cpinternal ISO8859-1,-cpstream ISO8859-1,-cpcoll Basic,-cpcase Basic,-d mdy,-numsep 44,-numdec 46,(end .pf),-b,-p test.p,-profile prof.pf" 
+.
+0 0 0 0 1 0.002116 1
+1 0 1 0 1 0.002116
+.
+.

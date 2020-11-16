@@ -24,7 +24,7 @@ grammar ProfilerGrammar;
 }
 
 profiler:
-  description module_data call_tree_data line_summary tracing_data coverage_data coverage_data2 user_data;
+  description module_data call_tree_data line_summary tracing_data coverage_data coverage_data2 statistics_data user_data;
 
 description:
   version=NUMBER
@@ -71,11 +71,39 @@ coverage_section_line:
   linenum=NUMBER NEWLINE;
 
 coverage_data2:
-  { versionNumber >= 3 }?
+  { versionNumber == 3 }?
   coverage_section2_line* CHR_DOT NEWLINE;
 
 coverage_section2_line:
   NUMBER NUMBER NUMBER NUMBER NUMBER FLOAT NUMBER* NEWLINE;
+
+statistics_data:
+  { versionNumber == 4 }?
+  stats1_data stats2_data stats3_data stats4_data CHR_DOT NEWLINE;
+
+stats1_data:
+  stats1_line* CHR_DOT NEWLINE;
+
+stats2_data:
+  stats2_line* CHR_DOT NEWLINE;
+
+stats3_data:
+  stats3_line* CHR_DOT NEWLINE;
+
+stats4_data:
+  stats4_line* CHR_DOT NEWLINE;
+
+stats1_line:
+  NUMBER NUMBER NUMBER STRING NEWLINE;
+
+stats2_line:
+  NUMBER FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT NEWLINE;
+
+stats3_line:
+  NUMBER NUMBER NUMBER NUMBER NEWLINE;
+
+stats4_line:
+  NUMBER NUMBER STRING NEWLINE;
 
 user_data:
   user_data_line* CHR_DOT NEWLINE;

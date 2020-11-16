@@ -126,4 +126,11 @@ public class TestProfiler {
     Assert.assertEquals(session2.getModuleByName("MyLogger").getLinesToCover().size(), 3);
   }
 
+
+  @Test
+  public void testProfilerStatistics() throws IOException {
+    // Version number 4 when using the -STATISTICS in 12.2
+    ProfilerSession session = ProfilerUtils.getProfilerSession(new File("src/test/resources/profiler13.out"));
+    Assert.assertEquals(session.getVersionNumber(), 3);
+  }
 }
