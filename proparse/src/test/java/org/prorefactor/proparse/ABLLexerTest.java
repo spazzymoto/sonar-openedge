@@ -65,6 +65,25 @@ public class ABLLexerTest {
   }
 
   @Test
+  public void testId() {
+    final String source = "FUNCTION h!ello !hello ! RETURNS VOID";
+    ABLLexer lexer = new ABLLexer(session, ByteSource.wrap(source.getBytes()), "file.txt", true);
+
+    assertEquals(lexer.nextToken().getType(), Proparse.FUNCTION);
+    assertEquals(lexer.nextToken().getType(), Proparse.WS);
+    ProToken tok = (ProToken) lexer.nextToken();
+    assertEquals(tok.getNodeType(), ABLNodeType.ID);
+    assertEquals(tok.getText(), "h!ello");
+    assertEquals(lexer.nextToken().getType(), Proparse.WS);
+    tok = (ProToken) lexer.nextToken();
+    assertEquals(tok.getNodeType(), ABLNodeType.ID);
+    assertEquals(tok.getText(), "!hello");
+    assertEquals(lexer.nextToken().getType(), Proparse.WS);
+    tok = (ProToken) lexer.nextToken();
+    assertEquals(tok.getNodeType(), ABLNodeType.EXCLAMATION);
+  }
+
+  @Test
   public void testEndOfFile() {
     // Could be anything...
     final String source = "CURRENT-WINDOW:HANDLE. SESSION:FIRST-SERVER-SOCKET:HANDLE. TEMP-TABLE tt1::fld1. DATASET ds1::tt1. DATASET ds1::tt1:set-callback().";

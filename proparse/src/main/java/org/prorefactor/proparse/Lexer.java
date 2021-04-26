@@ -258,7 +258,12 @@ public class Lexer implements IPreprocessor {
           return makeToken(ABLNodeType.COMMA);
         case '!':
           getChar();
-          return makeToken(ABLNodeType.EXCLAMATION);
+          if (currIsSpace())
+            return makeToken(ABLNodeType.EXCLAMATION);
+          else
+            append();
+          getChar();
+          return id(ABLNodeType.ID);
         case '=':
           getChar();
           return makeToken(ABLNodeType.EQUAL);
