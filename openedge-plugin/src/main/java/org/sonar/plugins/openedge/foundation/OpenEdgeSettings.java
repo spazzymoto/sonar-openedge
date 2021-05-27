@@ -235,11 +235,12 @@ public class OpenEdgeSettings {
             String::toLowerCase).collect(Collectors.toList()));
   }
 
+  /**
+   * SonarLint only ; try to read rcode of InputFile 
+   */
   public final void parseHierarchy(InputFile file) {
     String relPath = getRelativePathToSourceDirs(file);
     LOG.debug("Parsing hierarchy of '{}' - Relative '{}'", file, relPath);
-    if (relPath == null)
-      return;
     File rcd = getRCode(relPath);
     LOG.debug("  RCode found: '{}'", rcd);
     if ((rcd != null) && rcd.exists()) {
@@ -254,7 +255,7 @@ public class OpenEdgeSettings {
     LOG.info("Injecting type info '{}'", info);
     defaultSession.injectTypeInfo(info);
     if (info.getParentTypeName() != null) {
-      File rcd = getRCode(info.getParentTypeName());
+      File rcd = getRCode(info.getParentTypeName(), true);
       if (rcd != null) {
         ITypeInfo inf = parseRCode(rcd);
         if (inf != null) {
@@ -263,7 +264,7 @@ public class OpenEdgeSettings {
       }
     }
     for (String str : info.getInterfaces()) {
-      File rcd = getRCode(str);
+      File rcd = getRCode(str, true);
       if (rcd != null) {
         ITypeInfo inf = parseRCode(rcd);
         if (inf != null) {
@@ -403,12 +404,15 @@ public class OpenEdgeSettings {
     return cpdMethods.contains(name.toLowerCase(Locale.ENGLISH));
   }
 
+  public File getRCode(String fileName) {
+    return getRCode(fileName, false);
+  }
+
   /**
-   * Return File pointer to rcode in sonar.oe.binaries directory if such rcode exists
-   * 
+   * Return File pointer to rcode in sonar.oe.binaries and propath directory if such rcode exists
    * @param fileName File name from profiler
    */
-  public File getRCode(String fileName) {
+  public File getRCode(String fileName, boolean searchInPropath) {
     for (Path binariesDir : binariesDirs) {
       if (fileName.endsWith(".r"))
         return new File(fileName);
@@ -420,6 +424,17 @@ public class OpenEdgeSettings {
       Path rCode2 = binariesDir.resolve(fileName.replace('.', '/') + ".r");
       if (rCode2.toFile().exists())
         return rCode2.toFile();
+    }
+    if (searchInPropath) {
+      // TODO Read from PL files in a way that doesn't introduce performance problem
+      for (File entry : propathFull) {
+        File rCode = new File(entry, FilenameUtils.removeExtension(fileName) + ".r");
+        if (rCode.exists())
+          return rCode;
+        File rCode2 = new File(entry, fileName.replace('.', '/')  + ".r");
+        if (rCode2.exists())
+          return rCode2;
+      }
     }
 
     return null;
