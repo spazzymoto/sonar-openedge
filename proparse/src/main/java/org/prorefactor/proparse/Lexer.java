@@ -147,6 +147,130 @@ public class Lexer implements IPreprocessor {
     this.writableTokens = true;
   }
 
+  private ProToken nextTokenFromQuote() {
+    if (escapeCurrent) {
+      getChar();
+      // Escaped quote does not start a string
+      return id(ABLNodeType.FILENAME);
+    } else {
+      int currStringType = currInt;
+      getChar();
+      return quotedString(currStringType);
+    }
+
+  }
+
+  private ProToken nextTokenFromSlash() {
+    getChar();
+    if (currChar == '=') {
+      append();
+      getChar();
+      return makeToken(ABLNodeType.SLASHEQUAL);
+    } else if (currChar == '*') {
+      return comment();
+    } else if (currChar == '/') {
+      return singleLineComment();
+    } else if (currChar == '(' || currIsSpace()) {
+      // slash (division) can only be followed by whitespace or '('
+      // ...that's what I found empirically, anyway. (jag 2003/05/09)
+      return makeToken(ABLNodeType.SLASH);
+    } else {
+      append();
+      getChar();
+      return id(ABLNodeType.FILENAME);
+    }
+  }
+
+  private ProToken nextTokenFromAt() {
+    getChar();
+    if (currIsSpace())
+      return makeToken(ABLNodeType.LEXAT);
+    else
+      append();
+    getChar();
+    return id(ABLNodeType.ANNOTATION);
+  }
+
+  private ProToken nextTokenFromExclamationMark() {
+    getChar();
+    if (currIsSpace())
+      return makeToken(ABLNodeType.EXCLAMATION);
+    else
+      append();
+    getChar();
+    return id(ABLNodeType.ID);
+  }
+
+  private ProToken nextTokenFromStar() {
+    getChar();
+    if (currChar == '=') {
+      append();
+      getChar();
+      return makeToken(ABLNodeType.STAREQUAL);
+    } else {
+      return makeToken(ABLNodeType.STAR);
+    }
+  }
+
+  private ProToken nextTokenFromZero() {
+    getChar();
+    if ((currChar == 'x') || (currChar == 'X')) {
+      append();
+      getChar();
+      return digitStart(true);
+    } else {
+      return digitStart(false);
+    }
+  }
+
+  private ProToken nextTokenFromGT() {
+    getChar();
+    if (currChar == '=') {
+      append();
+      getChar();
+      return makeToken(ABLNodeType.GTOREQUAL);
+    } else {
+      return makeToken(ABLNodeType.RIGHTANGLE);
+    }
+  }
+
+  private ProToken nextTokenFromLT() {
+  getChar();
+  if (currChar == '>') {
+    append();
+    getChar();
+    return makeToken(ABLNodeType.GTORLT);
+  } else if (currChar == '=') {
+    append();
+    getChar();
+    return makeToken(ABLNodeType.LTOREQUAL);
+  } else {
+    return makeToken(ABLNodeType.LEFTANGLE);
+  }
+  }
+  
+  private ProToken nextTokenFromPlus() {
+    getChar();
+    if (currChar == '=') {
+      append();
+      getChar();
+      return makeToken(ABLNodeType.PLUSEQUAL);
+    } else {
+      return plusMinusStart(ABLNodeType.PLUS);
+    }
+  }
+  
+  private ProToken nextTokenFromMinus() {
+    getChar();
+    if (currChar == '=') {
+      append();
+      getChar();
+      return makeToken(ABLNodeType.MINUSEQUAL);
+    } else {
+      return plusMinusStart(ABLNodeType.MINUS);
+    }
+  }
+
   //////////////// Lexical productions listed first, support functions follow.
   public ProToken nextToken() {
     LOGGER.trace("Entering nextToken()");
@@ -187,6 +311,7 @@ public class Lexer implements IPreprocessor {
         return ampIfDefArg();
       }
 
+      // TODO Handle ! / & @ ^ ; * ` + - # %
       switch (currChar) {
 
         case '\t':
@@ -199,51 +324,17 @@ public class Lexer implements IPreprocessor {
 
         case '"':
         case '\'':
-          if (escapeCurrent) {
-            getChar();
-            // Escaped quote does not start a string
-            return id(ABLNodeType.FILENAME);
-          } else {
-            int currStringType = currInt;
-            getChar();
-            return quotedString(currStringType);
-          }
-
+          return nextTokenFromQuote();
         case '/':
-          getChar();
-          if (currChar == '=') {
-            append();
-            getChar();
-            return makeToken(ABLNodeType.SLASHEQUAL);
-          } else if (currChar == '*') {
-            return comment();
-          } else if (currChar == '/') {
-            return singleLineComment();
-          } else if (currChar == '(' || currIsSpace()) {
-            // slash (division) can only be followed by whitespace or '('
-            // ...that's what I found empirically, anyway. (jag 2003/05/09)
-            return makeToken(ABLNodeType.SLASH);
-          } else {
-            append();
-            getChar();
-            return id(ABLNodeType.FILENAME);
-          }
-
+          return nextTokenFromSlash();
         case ':':
           getChar();
           return colon();
-
         case '&':
           getChar();
           return ampText();
         case '@':
-          getChar();
-          if (currIsSpace())
-            return makeToken(ABLNodeType.LEXAT);
-          else
-            append();
-          getChar();
-          return id(ABLNodeType.ANNOTATION);
+          return nextTokenFromAt();
         case '[':
           getChar();
           return makeToken(ABLNodeType.LEFTBRACE);
@@ -257,13 +348,7 @@ public class Lexer implements IPreprocessor {
           getChar();
           return makeToken(ABLNodeType.COMMA);
         case '!':
-          getChar();
-          if (currIsSpace())
-            return makeToken(ABLNodeType.EXCLAMATION);
-          else
-            append();
-          getChar();
-          return id(ABLNodeType.ID);
+          return nextTokenFromExclamationMark();
         case '=':
           getChar();
           return makeToken(ABLNodeType.EQUAL);
@@ -277,14 +362,7 @@ public class Lexer implements IPreprocessor {
           getChar();
           return makeToken(ABLNodeType.SEMI);
         case '*':
-          getChar();
-          if (currChar == '=') {
-            append();
-            getChar();
-            return makeToken(ABLNodeType.STAREQUAL);
-          } else {
-            return makeToken(ABLNodeType.STAR);
-          }
+          return nextTokenFromStar();
         case '?':
           getChar();
           return makeToken(ABLNodeType.UNKNOWNVALUE);
@@ -293,14 +371,7 @@ public class Lexer implements IPreprocessor {
           return makeToken(ABLNodeType.BACKTICK);
 
         case '0':
-          getChar();
-          if ((currChar == 'x') || (currChar == 'X')) {
-            append();
-            getChar();
-            return digitStart(true);
-          } else {
-            return digitStart(false);
-          }
+          return nextTokenFromZero();
 
         case '1':
         case '2':
@@ -319,47 +390,15 @@ public class Lexer implements IPreprocessor {
           return periodStart();
 
         case '>':
-          getChar();
-          if (currChar == '=') {
-            append();
-            getChar();
-            return makeToken(ABLNodeType.GTOREQUAL);
-          } else {
-            return makeToken(ABLNodeType.RIGHTANGLE);
-          }
+          return nextTokenFromGT();
 
         case '<':
-          getChar();
-          if (currChar == '>') {
-            append();
-            getChar();
-            return makeToken(ABLNodeType.GTORLT);
-          } else if (currChar == '=') {
-            append();
-            getChar();
-            return makeToken(ABLNodeType.LTOREQUAL);
-          } else {
-            return makeToken(ABLNodeType.LEFTANGLE);
-          }
+          return nextTokenFromLT();
 
         case '+':
-          getChar();
-          if (currChar == '=') {
-            append();
-            getChar();
-            return makeToken(ABLNodeType.PLUSEQUAL);
-          } else {
-            return plusMinusStart(ABLNodeType.PLUS);
-          }
+          return nextTokenFromPlus();
         case '-':
-          getChar();
-          if (currChar == '=') {
-            append();
-            getChar();
-            return makeToken(ABLNodeType.MINUSEQUAL);
-          } else {
-            return plusMinusStart(ABLNodeType.MINUS);
-          }
+          return nextTokenFromMinus();
 
         case '#':
         case '|':
